@@ -1,0 +1,33 @@
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `Username` varchar(255) NOT NULL,
+  `Phone` int(10) NOT NULL,
+  `Email` varchar(255) NOT NULL,
+  `Password` varchar(15) NOT NULL,
+  `UserType` varchar(255) NOT NULL DEFAULT 'user'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+CREATE TABLE `categories` (
+  `cat_id` int(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `cat_Name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+CREATE TABLE `clothes` (
+  `ClothId` int(30) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `cat_id` int(30) NOT NULL,
+  `ClothName` varchar(255) NOT NULL,
+  `ClothDescription` varchar(255) NOT NULL,
+  `Price` decimal(10,2) NOT NULL,
+  `Quantity` int(10) NOT NULL,
+  `Color` varchar(255) NOT NULL,
+  `ImgeData` longblob NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+ALTER TABLE `clothes`
+ADD FOREIGN KEY (cat_id) REFERENCES categories(cat_id);
+
