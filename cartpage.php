@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+// Check if logout is requested
+if (isset($_POST['logout'])) {
+    // Destroy the session
+    session_destroy();
+
+    // Redirect to login page
+    header("Location: login.php");
+    exit;
+}
 // Check if the cart is not empty and the product key to delete is provided
 if (!empty($_SESSION['cart']) && isset($_POST['delete_key'])) {
     $deleteKey = $_POST['delete_key'];
@@ -20,13 +29,7 @@ function calculateTotalPrice($cart) {
                     $totalPrice += $item['Price'] * $item['Quantity'];
                 }
                 
-                if (!empty($item['Price']) && !empty($item['Quantity'])) {
-                    $totalPrice += $item['Price'] * $item['Quantity'];
-                }
-                
-                // if(array_key_exists('Price', $item) && array_key_exists('Quantity', $item)){
-                // $totalPrice += $item['Price'] * $item['Quantity'];
-                // }
+               
             }
         }
     
