@@ -14,9 +14,9 @@ class ClothStore {
         return in_array($file['type'], $allowed_types);
     }
 
-    public function addCloth($CatId,$ClothName, $ClothDescription, $Quantity, $Price, $Color, $image_data) {
-        $stmt = $this->dbc->prepare("INSERT INTO clothes (CatId,ClothName, ClothDescription, Quantity, Price, Color, ImgeData) VALUES (?,?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param('sssssss',$CatId, $ClothName, $ClothDescription, $Quantity, $Price, $Color, $image_data);
+    public function addCloth($cat_id,$ClothName, $ClothDescription, $Quantity, $Price, $Color, $image_data) {
+        $stmt = $this->dbc->prepare("INSERT INTO clothes (cat_id,ClothName, ClothDescription, Quantity, Price, Color, ImgeData) VALUES (?,?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param('sssssss',$cat_id, $ClothName, $ClothDescription, $Quantity, $Price, $Color, $image_data);
         $result = $stmt->execute();
         $stmt->close();
         return $result;
@@ -43,10 +43,10 @@ class ClothStore {
             } else {
                 $ClothName = $_POST['ClothName'];
             }
-            if (empty($_POST['CatId'])) {
+            if (empty($_POST['cat_id'])) {
                 $this->errors[] = "<p>Error: Catgrories required</p>";
             } else {
-                $CatId = $_POST['CatId'];
+                $cat_id= $_POST['cat_id'];
             }
             if (empty($_POST['ClothDescription'])) {
                 $this->errors[] = "<p>Error: Cloth description is required</p>";
@@ -74,7 +74,7 @@ class ClothStore {
 
             // If there are no validation errors, proceed with database insertion
             if (empty($this->errors)) {
-                $result = $this->addCloth($CatId,$ClothName, $ClothDescription, $Quantity, $Price, $Color, $image_data);
+                $result = $this->addCloth($cat_id,$ClothName, $ClothDescription, $Quantity, $Price, $Color, $image_data);
                 if ($result) {
                     header("Location: cloth_details.php");
                     exit;
@@ -131,6 +131,12 @@ $clothStore->handleFormSubmission();
                         <li class="nav-item">
                             <a class="nav-link" href="admindashboard.php">Add Clothes</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="admin_category.php">Add Category</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="category_details.php">Category Details</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -148,11 +154,27 @@ $clothStore->handleFormSubmission();
         <form class="form" method="POST" action="" id="registration_form" enctype="multipart/form-data">
         <div class="form-group">
     <label for="category">Category:</label>
-    <select class="form-control" id="category" name="CatId" required>
+    
+    <select class="form-control" id="category" name="cat_id" required>
         <option value="">Select Category</option>
-        <option value="1">Men</option>
-        <option value="2">Women</option>
-    </select>
+        <!-- <option value="1">Men</option>
+        <option value="2">Women</option> -->
+       
+                    
+                        <?php
+                
+                $categoryQuery = "SELECT * FROM categories";
+                $categoryResult = mysqli_query($dbc, $categoryQuery);
+
+               
+                while ($category = mysqli_fetch_assoc($categoryResult)) {
+                    echo '<option value="' . $category['cat_id'] . '">' . $category['cat_Name'] . '</option>';
+                }
+                ?>
+                    </select>
+                
+        
+
 </div>
 
             <div class="form-group">
